@@ -1,117 +1,81 @@
 package part1.part1_1;
 
-/**
- * Задание 1.1 — Банковский счёт
- *
- * Тема: статические и экземплярные блоки инициализации, инкапсуляция.
- *
- * Ключевая теория:
- *   - static { ... } выполняется ОДИН РАЗ при загрузке класса (после статических полей, до new).
- *   - { ... } (блок экземпляра) выполняется при каждом new, после явной инициализации полей в объявлении, ДО тела конструктора.
- *   - Порядок при new: блок экземпляра → конструктор (статическая часть класса уже выполнена один раз).
- *   - static-поле принадлежит классу, а не объекту (общее для всех экземпляров).
- *   - Для форматирования double: String.format("%.2f", value)
- *
- * Как запустить: нажмите ▶ рядом с main.
- *
- * Ожидаемый вывод:
- *   Банковская система инициализирована
- *   Создание счёта #1
- *   Создание счёта #2
- *   [ACC-1] Алиса: 1000.00 руб.
- *   [ACC-2] Борис: 500.00 руб.
- *   После пополнения: [ACC-1] Алиса: 1500.00 руб.
- *   После снятия: [ACC-1] Алиса: 1300.00 руб.
- *   Ошибка: недостаточно средств
- *   Ошибка: сумма должна быть положительной
- *   Всего счетов: 2
- */
 public class BankAccount {
-
+    // Приватные поля экземпляра
     private String owner;
     private double balance;
-    private String accountNumber;   // формат: "ACC-1", "ACC-2" и т.д.
+    private String accountNumber;
 
-    private static int totalAccounts;
+    // Приватные статические поля
+    private static int totalAccounts = 0;
     private static String bankName;
 
+    // Статический блок инициализации
     static {
-        // TODO: bankName = "Java Bank"; выведите "Банковская система инициализирована"
-        // ▼ ВАШ КОД ЗДЕСЬ ▼
-bankName = "my bank";
-        // ▲ КОНЕЦ ВАШЕГО КОДА ▲
+        bankName = "Java Bank";
+        System.out.println("Банковская система инициализирована");
     }
 
+    // Блок инициализации экземпляра
     {
-        // TODO: totalAccounts++; выведите "Создание счёта #" + totalAccounts
-        // ▼ ВАШ КОД ЗДЕСЬ ▼
-totalAccounts++;
-        System.out.println("hi");
-        // ▲ КОНЕЦ ВАШЕГО КОДА ▲
+        totalAccounts++;
+        System.out.println("Создание счёта #" + totalAccounts);
     }
 
-    /**
-     * Подсказка: к моменту конструктора блок экземпляра уже увеличил totalAccounts.
-     * accountNumber = "ACC-" + totalAccounts
-     */
+    // Конструктор
     public BankAccount(String owner, double initialBalance) {
-        // ▼ ВАШ КОД ЗДЕСЬ ▼
-
-        // ▲ КОНЕЦ ВАШЕГО КОДА ▲
+        this.owner = owner;
+        this.balance = initialBalance;
+        this.accountNumber = "ACC-" + totalAccounts;
     }
 
-    /**
-     * Если amount <= 0 — сообщение об ошибке и выход без изменения баланса.
-     */
+    // Метод пополнения
     public void deposit(double amount) {
-        // ▼ ВАШ КОД ЗДЕСЬ ▼
-
-        // ▲ КОНЕЦ ВАШЕГО КОДА ▲
+        if (amount <= 0) {
+            System.out.println("Ошибка: сумма должна быть положительной");
+        } else {
+            balance += amount;
+        }
     }
 
-    /**
-     * Если amount <= 0 или balance < amount — соответствующее сообщение, без снятия.
-     * Иначе уменьшите balance.
-     */
+    // Метод снятия
     public void withdraw(double amount) {
-        // ▼ ВАШ КОД ЗДЕСЬ ▼
-
-        // ▲ КОНЕЦ ВАШЕГО КОДА ▲
+        if (amount <= 0) {
+            System.out.println("Ошибка: сумма должна быть положительной");
+        } else if (amount > balance) {
+            System.out.println("Ошибка: недостаточно средств");
+        } else {
+            balance -= amount;
+        }
     }
 
+    // Статический метод
     public static int getTotalAccounts() {
-        // ▼ ВАШ КОД ЗДЕСЬ ▼
-        return 0; // TODO: верните totalAccounts
-        // ▲ КОНЕЦ ВАШЕГО КОДА ▲
+        return totalAccounts;
     }
 
-    /**
-     * Формат: "[ACC-1] Алиса: 1500.00 руб."
-     * Подсказка: String.format("[%s] %s: %.2f руб.", accountNumber, owner, balance)
-     */
+    // Переопределённый toString
     @Override
     public String toString() {
-        // ▼ ВАШ КОД ЗДЕСЬ ▼
-        return ""; // TODO: реализуйте формат выше
-        // ▲ КОНЕЦ ВАШЕГО КОДА ▲
+        return String.format("[%s] %s: %.2f руб.", accountNumber, owner, balance);
     }
 
+    // Метод main для демонстрации
     public static void main(String[] args) {
-        BankAccount a1 = new BankAccount("Алиса", 1000);
-        BankAccount a2 = new BankAccount("Борис", 500);
+        BankAccount account1 = new BankAccount("Алиса", 1000);
+        BankAccount account2 = new BankAccount("Боб", 500);
 
-        System.out.println(a1);
-        System.out.println(a2);
+        System.out.println(account1);
+        System.out.println(account2);
 
-        a1.deposit(500);
-        System.out.println("После пополнения: " + a1);
+        account1.deposit(500);
+        System.out.println(account1);
 
-        a1.withdraw(200);
-        System.out.println("После снятия: " + a1);
+        account1.withdraw(200);
+        System.out.println(account1);
 
-        a1.withdraw(5000);
-
-        a2.deposit(-100);
+        account1.withdraw(2000);
+        System.out.println(account1);
 
         System.out.println("Всего счетов: " + BankAccount.getTotalAccounts());
     }

@@ -1,67 +1,93 @@
 package part1.part1_3;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import part1.part1_1.BankAccount;
+import java.util.ArrayList;
 
-/**
- * Задание 1.3 — Ключевое слово var
- *
- * Тема: вывод типа локальных переменных (Java 10+).
- *
- * Ключевая теория:
- *   - var — НЕ динамическая типизация. Компилятор определяет тип из правой части
- *     и фиксирует его навсегда.
- *   - var работает ТОЛЬКО для локальных переменных с инициализатором.
- *   - Нельзя использовать: для полей класса, параметров методов, без init, с null.
- *   - Проверка типа: ((Object) variable).getClass().getSimpleName()
- *
- * Как запустить: нажмите ▶ рядом с main.
- *
- * Ожидаемый вывод (примерный):
- *   42 -> Integer
- *   Java -> String
- *   [один, два] -> ArrayList
- *   [1, 2, 3] -> int[]
- *   BankAccount -> BankAccount
- */
 public class VarDemo {
 
+    // НЕ КОМПИЛИРУЕТСЯ - var нельзя использовать как поле класса
     // var field = 10;
-    // ↑ Не компилируется: var нельзя использовать для полей класса.
 
     public static void main(String[] args) {
 
-        // === Рабочие примеры var ===
+        System.out.println("=== Демонстрация ключевого слова var (Java 10+) ===\n");
 
-        // TODO: Пример 1 — целое число
-        //   var number = 42;
-         //  System.out.println(number + " -> " + ((Object) number).getClass().getSimpleName());
+        System.out.println("5 КОРРЕКТНЫХ ПРИМЕРОВ:\n");
 
-        // TODO: Пример 2 — строка
-          // var text = "Java";
-          // System.out.println(text + " -> " + text.getClass().getSimpleName());
+        // Пример 1: int
+        var number = 42;
+        System.out.println("  var number = 42 -> " + getTypeName(number));
 
-        // TODO: Пример 3 — ArrayList
-        //   var list = new ArrayList<>(Arrays.asList("один", "два"));
-        //   System.out.println(list + " -> " + list.getClass().getSimpleName());
+        // Пример 2: String
+        var text = "Java";
+        System.out.println("  var text = \"Java\" -> " + getTypeName(text));
 
-        // TODO: Пример 4 — массив
-        //   var array = new int[]{1, 2, 3};
-        //   System.out.println(Arrays.toString(array) + " -> " + array.getClass().getSimpleName());
+        // Пример 3: ArrayList<String>
+        var list = new ArrayList<String>();
+        list.add("один");
+        list.add("два");
+        list.add("три");
+        System.out.println("  var list = new ArrayList<String>() -> " + getTypeName(list));
 
-        // TODO: Пример 5 — ваш собственный объект (например, BankAccount)
-        //   var account = new BankAccount("Тест", 0);
-        //   System.out.println(account.getClass().getSimpleName() + " -> " + account.getClass().getSimpleName());
+        // Пример 4: массив
+        var array = new int[]{1, 2, 3, 4, 5};
+        System.out.println("  var array = new int[]{...} -> " + getTypeName(array));
 
-        // TODO: раскомментируйте примеры выше по одному и запустите программу.
+        // Пример 5: BankAccount
+        var account = new BankAccount("Тестовый", 1000);
+        System.out.println("  var account = new BankAccount(...) -> " + getTypeName(account));
 
-        // === Случаи, где var НЕ компилируется ===
+        // Вывод значений
+        System.out.println("\nЗНАЧЕНИЯ ПЕРЕМЕННЫХ:");
+        System.out.println("  number = " + number);
+        System.out.println("  text = " + text);
+        System.out.println("  list = " + list);
+        System.out.println("  array = " + java.util.Arrays.toString(array));
+        System.out.println("  account = " + account);
 
-        // 1. Без инициализации:  var x;            // нельзя определить тип
-        // 2. Как параметр:       void test(var p)   // параметры требуют явный тип
-        // 3. Как поле класса:    (показано выше)
-        // 4. С null:             var nothing = null; // null не имеет типа
+        // 4 примера, где var НЕ РАБОТАЕТ
+        System.out.println("\n------------------------------------------------------------");
+        System.out.println("\n4 ПРИМЕРА, ГДЕ var НЕ КОМПИЛИРУЕТСЯ:\n");
+
+        System.out.println("1. var без инициализации:");
+        System.out.println("   var x;");
+        System.out.println("   x = 10;");
+        System.out.println("   Ошибка: \"Cannot infer type: variable initializer is required\"");
+        System.out.println("   Причина: var требует немедленной инициализации\n");
+
+        System.out.println("2. var как параметр метода:");
+        System.out.println("   public void method(var param) { }");
+        System.out.println("   Ошибка: \"'var' is not allowed as a parameter type\"");
+        System.out.println("   Причина: var можно использовать только для локальных переменных\n");
+
+        System.out.println("3. var как поле класса:");
+        System.out.println("   public class MyClass {");
+        System.out.println("       var field = \"text\";");
+        System.out.println("   }");
+        System.out.println("   Ошибка: \"'var' is not allowed in a field declaration\"");
+        System.out.println("   Причина: поля класса должны иметь явный тип\n");
+
+        System.out.println("4. var c null:");
+        System.out.println("   var obj = null;");
+        System.out.println("   Ошибка: \"Cannot infer type: variable initializer is 'null'\"");
+        System.out.println("   Причина: null может относиться к любому типу,");
+        System.out.println("            компилятор не может определить конкретный тип\n");
+
+        System.out.println("------------------------------------------------------------");
+        System.out.println("\nИТОГИ:");
+        System.out.println("  - var работает только с локальными переменными");
+        System.out.println("  - var требует немедленной инициализации");
+        System.out.println("  - Тип определяется на этапе компиляции (не во время выполнения)");
+        System.out.println("  - Не работает: поля класса, параметры методов, без инициализации, null");
+    }
+
+    private static String getTypeName(Object obj) {
+        if (obj == null) {
+            return "null";
+        }
+        if (obj.getClass().isArray()) {
+            return obj.getClass().getComponentType().getSimpleName() + "[]";
+        }
+        return obj.getClass().getSimpleName();
     }
 }

@@ -1,0 +1,54 @@
+=== Демонстрация ключевого слова var (Java 10+) ===
+
+5 КОРРЕКТНЫХ ПРИМЕРОВ:
+
+  var number = 42 -> Integer
+  var text = "Java" -> String
+  var list = new ArrayList<String>() -> ArrayList
+  var array = new int[]{...} -> int[]
+Банковская система инициализирована
+Создание счёта #1
+  var account = new BankAccount(...) -> BankAccount
+
+ЗНАЧЕНИЯ ПЕРЕМЕННЫХ:
+  number = 42
+  text = Java
+  list = [один, два, три]
+  array = [1, 2, 3, 4, 5]
+  account = [ACC-1] Тестовый: 1000,00 руб.
+
+------------------------------------------------------------
+
+4 ПРИМЕРА, ГДЕ var НЕ КОМПИЛИРУЕТСЯ:
+
+1. var без инициализации:
+   var x;
+   x = 10;
+   Ошибка: "Cannot infer type: variable initializer is required"
+   Причина: var требует немедленной инициализации
+
+2. var как параметр метода:
+   public void method(var param) { }
+   Ошибка: "'var' is not allowed as a parameter type"
+   Причина: var можно использовать только для локальных переменных
+
+3. var как поле класса:
+   public class MyClass {
+       var field = "text";
+   }
+   Ошибка: "'var' is not allowed in a field declaration"
+   Причина: поля класса должны иметь явный тип
+
+4. var c null:
+   var obj = null;
+   Ошибка: "Cannot infer type: variable initializer is 'null'"
+   Причина: null может относиться к любому типу,
+            компилятор не может определить конкретный тип
+
+------------------------------------------------------------
+
+ИТОГИ:
+  - var работает только с локальными переменными
+  - var требует немедленной инициализации
+  - Тип определяется на этапе компиляции (не во время выполнения)
+  - Не работает: поля класса, параметры методов, без инициализации, null
