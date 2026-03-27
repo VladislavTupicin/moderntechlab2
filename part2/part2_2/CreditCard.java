@@ -1,39 +1,22 @@
 package part2.part2_2;
 
-/**
- * Задание 2.2 — Кредитная карта (реализация PaymentMethod)
- *
- * Подсказка: record автоматически генерирует конструктор,
- * геттеры cardNumber() и holder(), а также
- * equals(), hashCode() и toString().
- *
- * Для получения последних 4 цифр номера карты:
- * cardNumber.substring(cardNumber.length() - 4)
- */
 public record CreditCard(String cardNumber, String holder) implements PaymentMethod {
 
-    /**
-     * "Оплата картой *XXXX: Z руб." (последние 4 цифры номера).
-     *
-     * Подсказка:
-     * return "Оплата картой *" + cardNumber.substring(cardNumber.length() - 4) + ": " + amount + " руб.";
-     */
     @Override
     public String process(double amount) {
-        // ▼ ВАШ КОД ЗДЕСЬ ▼
-        return ""; // TODO: верните "Оплата картой *" + cardNumber.substring(cardNumber.length()-4) + ": " + amount + " руб."
-        // ▲ КОНЕЦ ВАШЕГО КОДА ▲
+        String last4 = getLastFourDigits(cardNumber);
+        return String.format("Оплата картой *%s: %.0f руб.", last4, amount);
     }
 
-    /**
-     * Комиссия = 2% от суммы.
-     *
-     * Подсказка: return amount * 0.02;
-     */
     @Override
     public double fee(double amount) {
-        // ▼ ВАШ КОД ЗДЕСЬ ▼
-        return 0; // TODO: верните amount * 0.02
-        // ▲ КОНЕЦ ВАШЕГО КОДА ▲
+        return amount * 0.02; // 2% комиссия
+    }
+
+    private String getLastFourDigits(String cardNumber) {
+        if (cardNumber == null || cardNumber.length() < 4) {
+            return "XXXX";
+        }
+        return cardNumber.substring(cardNumber.length() - 4);
     }
 }
