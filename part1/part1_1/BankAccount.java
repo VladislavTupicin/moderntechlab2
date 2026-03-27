@@ -38,7 +38,7 @@ public class BankAccount {
     static {
         // TODO: bankName = "Java Bank"; выведите "Банковская система инициализирована"
         // ▼ ВАШ КОД ЗДЕСЬ ▼
-
+bankName = "my bank";
         // ▲ КОНЕЦ ВАШЕГО КОДА ▲
     }
 
